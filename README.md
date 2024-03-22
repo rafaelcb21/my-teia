@@ -11,7 +11,9 @@ Para instalar todos os requisitos, precisa ter o NodeJS instalado na versão 18 
 Execute `ng serve --open` ou `ng s -o` para iniciar um servidor de desenvolvimento. Navegue para `http://localhost:4200/`. A aplicação será recarregada automaticamente se você modificar algum dos arquivos de origem.
 
 ## Compilação
+
 Execute `ng build` para compilar o projeto. Os artefatos de compilação serão armazenados no diretório `dist/`.
+
 ---
 
 # My Teia
