@@ -1,0 +1,49 @@
+import { Component, Inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+} from '@angular/material/dialog';
+
+export interface DialogData {
+  image: 'https://via.placeholder.com/600/92c952';
+}
+
+@Component({
+  selector: 'app-card',
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatButtonModule
+  ],
+  templateUrl: './card.component.html',
+  styleUrl: './card.component.css'
+})
+export class CardComponent {
+  constructor(public dialog: MatDialog) {}
+
+  openDialog() {
+    this.dialog.open(DialogElementComponent, {
+      data: {
+        image: 'https://via.placeholder.com/600/92c952',
+      },
+    });
+  }
+}
+
+
+
+@Component({
+  selector: 'app-dialog',
+  templateUrl: 'product-dialog.component.html',
+  standalone: true,
+  imports: [MatDialogTitle, MatDialogContent],
+  styleUrl: './card.component.css'
+})
+export class DialogElementComponent {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+  
+}

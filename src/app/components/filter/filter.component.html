@@ -1,0 +1,45 @@
+<form class="form">
+    <div class="filters">
+      <mat-form-field class="input-filter">
+        <mat-label>Album</mat-label>
+        <input type="text"
+              placeholder=""
+              aria-label="Album"
+              matInput
+              [formControl]="albumControl"
+              [matAutocomplete]="albumAuto"
+              id="albumInput">
+        <mat-autocomplete #albumAuto="matAutocomplete">
+          @for (album of filteteredAlbumOptions | async; track album) {
+            <mat-option [value]="album">{{album}}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field class="input-filter">
+        <mat-label>Produto</mat-label>
+        <input type="text"
+              placeholder=""
+              aria-label="Produto"
+              matInput
+              [formControl]="productControl"
+              [matAutocomplete]="productAuto"
+              id="productInput">
+        <mat-autocomplete #productAuto="matAutocomplete">
+          @for (product of filteteredProductOptions | async; track product) {
+            <mat-option [value]="product">{{product}}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field class="input-filter">
+        <mat-label>Ordenar</mat-label>
+        <mat-select (selectionChange)="selectSort($event.value)">
+          <mat-option [value]="null"></mat-option>
+          <mat-option *ngFor="let ordernation of sorted; trackBy: trackByFn"
+            [value]="ordernation.value">{{ordernation.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>      
+    </div>
+  </form>

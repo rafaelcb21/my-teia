@@ -1,0 +1,28 @@
+.card {
+  width: 250px;
+}
+
+.mdc-card__actions {
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+mat-card-header {
+  margin-bottom: 1rem;
+}
+
+mat-card-content {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mat-mdc-dialog-content {
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-card {
+  cursor: pointer;
+}

@@ -1,0 +1,12 @@
+<mat-toolbar color="primary" class="mat-toolbar-fixed-top">
+  <div class="logo">
+    <img class="app-logo" ngSrc="/assets/teia-logo.svg" width="40" height="40" alt="logo teia"/>
+    <span>App Teia</span>
+  </div>
+  <span class="spacer"></span>
+  <div class="cart-icon-container">
+    <mat-icon>shopping_cart</mat-icon>
+    <div class="cart-badge" *ngIf="numberOfItems > 0">{{ numberOfItems }}</div>
+  </div>
+</mat-toolbar>
+  
