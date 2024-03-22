@@ -16,6 +16,10 @@ export class ProductsService {
     return this.http.get<Product[]>(this.endpointUrl + '?_sort=id&_order=desc&_limit=1')
   }
 
+  fetchGet(url: string) {
+    return this.http.get<Product[]>(url)
+  }
+
   fetchGetProducts(param: Map<string, string> ) {
     let urlParams = '';
 

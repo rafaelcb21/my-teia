@@ -6,6 +6,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { FilterComponent } from '../filter/filter.component';
 import { NgFor } from '@angular/common';
 import {PageEvent, MatPaginatorModule} from '@angular/material/paginator';
+import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-home',
@@ -17,10 +18,15 @@ import {PageEvent, MatPaginatorModule} from '@angular/material/paginator';
     NgFor,
     MatPaginatorModule
   ],
+  providers: [
+    ProductsService,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  constructor(public dialog: MatDialog, private service: ProductsService) {}
+
   produtos: Product[] = [];
   length = 5000;
   pageSize = 12;
@@ -44,51 +50,68 @@ export class HomeComponent {
     this.pageEvent = e;
     this.length = e.length;
     this.pageSize = e.pageSize;
-    this.pageIndex = e.pageIndex;
-    console.log('rafa', e, this.urlNext)
 
-    const params = new URLSearchParams(this.urlNext.split('?')[1]);
+    // avancando na paginacao
+    if(e.pageIndex > this.pageIndex) {
+      this.pageIndex = e.pageIndex;
 
-    let end = params.get('_end');
-    let start = params.get('_start');
+      const obj = this.convertStartEndToNumber(this.urlNext);
 
-    let parsedStart: number;
-    let parsedEnd: number;
+      let start = obj.startEnd[0];
+      let end = obj.startEnd[1];
 
-    if (start !== null) {
-      parsedStart = parseInt(start, 10);
+      let parsedStart: number = obj.listNumbers[0];
+      let parsedEnd: number = obj.listNumbers[1];
+  
+      parsedEnd = (e.pageIndex + 1) * 12;
+      const diferenca = parsedEnd - parsedStart;
+  
+      if (diferenca > 24) {
+        start = (parsedEnd - 12).toString();
+        end = '5000';
+
+      } else {
+        start = end;
+        end = ((e.pageIndex + 1) * 12).toString();
+      }
+  
+      this.urlNext = this.urlNext.replace(/_start=\d+/, `_start=${start}`);
+      this.urlNext = this.urlNext.replace(/_end=\d+/, `_end=${end}`);
+  
+      this.service.fetchGet(this.urlNext)
+        .subscribe((produtos: Product[]) => {
+        this.produtos = produtos
+      });
+
     } else {
-      parsedStart = 0;
-    }
+      // voltando na paginacao
+      this.pageIndex = e.pageIndex;
 
-    if (end !== null) {
-      parsedEnd = parseInt(end, 10);
-    } else {
-      parsedEnd = 0;
-    }
+      const obj = this.convertStartEndToNumber(this.urlNext);
 
-    parsedEnd = (e.pageIndex + 1) * 12
-    const diferenca = parsedEnd - parsedStart
+      let start = obj.startEnd[0];
+      let end = obj.startEnd[1];
 
-    if (diferenca > 12) {
-      start = (parsedEnd + 1 - 12).toString()
-      end = '5000'
+      let parsedStart: number = obj.listNumbers[0];
+      let parsedEnd: number = obj.listNumbers[1];
+
+      parsedStart = (e.pageIndex) * 12;
+      parsedEnd = (e.pageIndex + 1) * 12;
       
+      start = parsedStart.toString();
+      end = parsedEnd.toString();
 
-    } else {
-      start = end;
-      end = ((e.pageIndex + 1) * 12).toString()
+      this.urlNext = this.urlNext.replace(/_start=\d+/, `_start=${start}`);
+      this.urlNext = this.urlNext.replace(/_end=\d+/, `_end=${end}`);
+
+      this.service.fetchGet(this.urlNext)
+        .subscribe((produtos: Product[]) => {
+        this.produtos = produtos
+      });
     }
-
-
-    this.urlNext = this.urlNext.replace(/_start=\d+/, `_start=${start}`);
-    this.urlNext = this.urlNext.replace(/_end=\d+/, `_end=${end}`);
-
-    console.log(this.urlNext)
-
   }
 
-  constructor(public dialog: MatDialog) {}
+  
 
   receiveProducts($event: ProductUrl) {
     this.urlNext = $event.url
@@ -108,6 +131,53 @@ export class HomeComponent {
 
     this.produtos = $event.products
   }
+
+  convertStartEndToNumber(url: string) {
+    const params = new URLSearchParams(url.split('?')[1]);
+  
+    let end = params.get('_end');
+    let start = params.get('_start');
+
+    let parsedStart: number;
+    let parsedEnd: number;
+
+    let startNoNull: string = '0';
+    let endNoNull: string = '0';
+
+    if (start !== null) {
+      parsedStart = parseInt(start, 10);
+    } else {
+      parsedStart = 0;
+    }
+
+    if (end !== null) {
+      parsedEnd = parseInt(end, 10);
+    } else {
+      parsedEnd = 0;
+    }
+
+    if (start != null) {
+      startNoNull = start
+    }
+
+    if (end != null) {
+      endNoNull = end
+    }
+
+    const startEnd: string[] = [startNoNull, endNoNull]
+    const listNumbers: number[] = [parsedStart, parsedEnd]
+
+    type obj = {
+      startEnd: string[],
+      listNumbers: number[]
+    }
+
+    const newObj: obj = {startEnd, listNumbers}
+
+    return newObj
+  }
+
+  
   
 }
 
