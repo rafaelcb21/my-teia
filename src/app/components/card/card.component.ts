@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, Output, EventEmitter } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import {
@@ -27,6 +27,7 @@ export class CardComponent {
   constructor(public dialog: MatDialog) {}
 
   @Input() product: Product = {} as Product;
+  @Output() buyProduct = new EventEmitter<Product>()
 
   openDialog() {
     this.dialog.open(DialogElementComponent, {
@@ -34,6 +35,10 @@ export class CardComponent {
         image: this.product.url,
       },
     });
+  }
+
+  buy(produtoToBuy: Product) {
+    this.buyProduct.emit(produtoToBuy)
   }
 }
 

@@ -2,37 +2,62 @@ import { Component } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Product, ProductUrl } from '../../interfaces/product.interface';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { FilterComponent } from '../filter/filter.component';
 import { NgFor } from '@angular/common';
 import {PageEvent, MatPaginatorModule} from '@angular/material/paginator';
 import { ProductsService } from '../../services/products.service';
+import { CacheService } from '../../services/cache.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { NgIf, NgOptimizedImage } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     CardComponent,
-    NavbarComponent,
     FilterComponent,
     NgFor,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    NgOptimizedImage,
+    NgIf,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+    AsyncPipe,
+    MatSelectModule,
   ],
   providers: [
-    ProductsService,
+    ProductsService, CacheService
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  constructor(public dialog: MatDialog, private service: ProductsService) {}
+  constructor(
+    public dialog: MatDialog,
+    private service: ProductsService,
+    private cacheService: CacheService) {}
 
   produtos: Product[] = [];
+  productShopping: Product = {} as Product;
   length = 5000;
   pageSize = 12;
   pageIndex = 0;
   pageSizeOptions = [5, 10, 25];
-
+  numberOfItems: number = 0;
   hidePageSize = true;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
@@ -111,7 +136,14 @@ export class HomeComponent {
     }
   }
 
-  
+  buyProduct($event: Product) {
+    this.cacheService.saveProductBuy($event);
+    const productSaved = this.cacheService.getProductBuy()
+
+    if (productSaved !== null) {
+      this.numberOfItems = productSaved.length
+    }
+  }
 
   receiveProducts($event: ProductUrl) {
     this.urlNext = $event.url
