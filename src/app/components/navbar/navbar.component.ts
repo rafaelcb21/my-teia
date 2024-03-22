@@ -32,7 +32,7 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  numberOfItems: number = 1;
+  numberOfItems: number = 0;
 
   
 }

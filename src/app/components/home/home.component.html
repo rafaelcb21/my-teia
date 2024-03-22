@@ -1,15 +1,37 @@
-<app-header></app-header>
+<app-navbar></app-navbar>
+<app-filter (receiveProducts)="receiveProducts($event)"></app-filter>
 
 <main class='main'>
-  <app-card></app-card>
-  <app-card></app-card>
-  <app-card></app-card>
-  <app-card></app-card>
-  <app-card></app-card>
-  <app-card></app-card>
-  <app-card></app-card>
-  <app-card></app-card>
+  <ng-container *ngFor="let produto of produtos">
+    <app-card [product]="produto"></app-card>
+  </ng-container>
 </main>
 
-<div>Copyright © 2024 - Todos os direitos reservados.</div>
+<div class="container-paginator"
+style="display: flex; justify-content: end; align-items: end; flex-wrap: wrap; margin-right: 40px;"
+>
+  <mat-paginator #paginator
+                class="paginator"
+                (page)="handlePageEvent($event)"
+                [length]="length"
+                [pageSize]="pageSize"
+                [disabled]="disabled"
+                [showFirstLastButtons]="showFirstLastButtons"
+                [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                [hidePageSize]="hidePageSize"
+                [pageIndex]="pageIndex"
+                aria-label="Select page">
+  </mat-paginator>
+</div>
+
+<footer>
+  <div classe="footer">
+    <div style="padding: 1rem; background-color: #3f51b5; color: white;">
+      Copyright © 2023<br>
+      Todos os direitos reservados.
+  </div>
+</div>
+</footer>
+
+
 

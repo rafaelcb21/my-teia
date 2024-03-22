@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -11,8 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { ProductsService } from '../../services/products.service';
-import { Product } from '../../interfaces/product.interface';
-import { SharedDataService } from '../../services/shared-data.service';
+import { Product, ProductUrl } from '../../interfaces/product.interface';
 
 
 interface Sort {
@@ -38,7 +37,6 @@ interface Sort {
   ],
   providers: [
     ProductsService,
-    SharedDataService
   ],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css'
@@ -46,8 +44,7 @@ interface Sort {
 export class FilterComponent implements OnInit {
 
   constructor(
-    private service: ProductsService,
-    private SharedDataService: SharedDataService
+    private service: ProductsService
   ) {}
 
   albumControl = new FormControl('');
@@ -69,6 +66,8 @@ export class FilterComponent implements OnInit {
   paramProduct: string = '';
   params: Map<string, string> = new Map([['albumId=', ''], ['id=', ''], ['_order=', '']]);
 
+  @Output() receiveProducts = new EventEmitter<ProductUrl>()
+
   ngOnInit() {
     this.service.fetchLastProduct().subscribe((data: Product[]) => {
       this.lastAlbum = data[0].albumId;
@@ -76,6 +75,11 @@ export class FilterComponent implements OnInit {
 
       this.albumOptions = this.generateLisNumbersstring(this.lastAlbum)
       this.productOptions = this.generateLisNumbersstring(this.lastProduct)
+
+      this.service.fetchGetProducts(this.params)
+        .subscribe((produtos: ProductUrl) => {
+          this.receiveProducts.emit(produtos)
+      });
     });
 
     this.filteteredAlbumOptions = this.albumControl.valueChanges.pipe(
@@ -94,8 +98,8 @@ export class FilterComponent implements OnInit {
         if(isItemPresent || value === '') {
           this.params.set('albumId=', value);
           this.service.fetchGetProducts(this.params)
-            .subscribe((produtos: Product[]) => {
-            this.SharedDataService.setProdutos(produtos)
+            .subscribe((produtos: ProductUrl) => {
+              this.receiveProducts.emit(produtos)
           });
         }
       }
@@ -107,8 +111,8 @@ export class FilterComponent implements OnInit {
         if(isItemPresent || value === '') {
           this.params.set('id=', value);
           this.service.fetchGetProducts(this.params)
-            .subscribe((produtos: Product[]) => {
-              this.SharedDataService.setProdutos(produtos)
+            .subscribe((produtos: ProductUrl) => {
+              this.receiveProducts.emit(produtos)
             });
         }
       }
@@ -119,14 +123,14 @@ export class FilterComponent implements OnInit {
     if (value !== null) {
       this.params.set('_order=', value);
       this.service.fetchGetProducts(this.params)
-        .subscribe((produtos: Product[]) => {
-          this.SharedDataService.setProdutos(produtos)
+        .subscribe((produtos: ProductUrl) => {
+          this.receiveProducts.emit(produtos)
         });
     } else {
       this.params.set('_order=', '');
       this.service.fetchGetProducts(this.params)
-        .subscribe((produtos: Product[]) => {
-          this.SharedDataService.setProdutos(produtos)
+        .subscribe((produtos: ProductUrl) => {
+          this.receiveProducts.emit(produtos)
         });
     }
   }

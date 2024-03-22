@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import {
@@ -7,9 +7,10 @@ import {
   MatDialogTitle,
   MatDialogContent,
 } from '@angular/material/dialog';
+import { Product } from '../../interfaces/product.interface';
 
 export interface DialogData {
-  image: 'https://via.placeholder.com/600/92c952';
+  image: '';
 }
 
 @Component({
@@ -25,15 +26,16 @@ export interface DialogData {
 export class CardComponent {
   constructor(public dialog: MatDialog) {}
 
+  @Input() product: Product = {} as Product;
+
   openDialog() {
     this.dialog.open(DialogElementComponent, {
       data: {
-        image: 'https://via.placeholder.com/600/92c952',
+        image: this.product.url,
       },
     });
   }
 }
-
 
 
 @Component({
