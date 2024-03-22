@@ -77,6 +77,13 @@ export class HomeComponent implements OnInit {
     if (productSaved !== null) {
       this.numberOfItems = productSaved.length
     }
+
+    if (typeof localStorage !== 'undefined') {
+      const cachedProductBuy = localStorage.getItem('productBuy');
+      if (cachedProductBuy === null) {
+        localStorage.setItem('productBuy', JSON.stringify([]));
+      }
+    }
   }
 
   handlePageEvent(e: PageEvent) {
