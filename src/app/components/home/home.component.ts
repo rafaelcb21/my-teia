@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Product, ProductUrl } from '../../interfaces/product.interface';
@@ -10,13 +10,14 @@ import { CacheService } from '../../services/cache.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    NgOptimizedImage,
     NgIf,
     FormsModule,
     MatFormFieldModule,
@@ -38,6 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     AsyncPipe,
     MatSelectModule,
+    RouterLink
   ],
   providers: [
     ProductsService, CacheService
@@ -45,7 +46,7 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private service: ProductsService,
@@ -70,6 +71,13 @@ export class HomeComponent {
   }
 
   urlNext: string = ''
+
+  ngOnInit() {
+    const productSaved = this.cacheService.getProductBuy()
+    if (productSaved !== null) {
+      this.numberOfItems = productSaved.length
+    }
+  }
 
   handlePageEvent(e: PageEvent) {
     this.pageEvent = e;

@@ -1,0 +1,69 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+  }
+  
+  .paginator {
+    width: 600px;
+  }
+  
+  .container-paginator {
+    margin-bottom: 5rem;
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
+  
+  .app-logo {
+    margin-right: 1rem;
+  }
+  
+  .logo {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+  }
+
+  .mat-mdc-list-item-icon {
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  .container-list {
+    width: 30%;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .container-list {
+      width: 100%;
+    }
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .container-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  button {
+    margin-left: 11rem;
+    margin-bottom: 5rem;
+  }
+
+ 
+  

@@ -59,4 +59,5 @@
   padding: 0.5rem;
   border-radius: 50%;
   z-index: 1;
+  cursor: pointer;
 }

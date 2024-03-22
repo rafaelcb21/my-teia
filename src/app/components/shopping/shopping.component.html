@@ -1,0 +1,32 @@
+<mat-toolbar color="primary" class="mat-toolbar-fixed-top">
+    <div class="logo" routerLink="/">
+      <img class="app-logo" src="/assets/teia-logo.svg" width="40" height="40" alt="logo teia"/>
+      <span>App Teia</span>
+    </div>
+</mat-toolbar>
+
+<!--div class="container">
+  <mat-selection-list #produtosLista class="container-list" (selectionChange)="onSelectionChange($event)">
+    @for (produto of produtos; track produto) {
+      <mat-list-option>
+        <img matListItemIcon style="width: 45px; height: 45px;" [src]="produto.thumbnailUrl" width="45" height="45" alt="imagem do produto">
+        <div matListItemTitle>Produto: {{produto.id}}</div>
+        <div matListItemLine>Album: {{produto.albumId}}</div>
+      </mat-list-option>
+    }
+  </mat-selection-list>
+  <button mat-raised-button (click)="excluir()" color="warn">EXCLUIR</button>
+</div-->
+
+<div class="container">
+  <mat-selection-list #produtosLista class="container-list" (selectionChange)="onSelectionChange($event)">
+    <ng-container *ngFor="let produto of produtos; trackBy: trackByFn">
+      <mat-list-option [value]="produto">
+        <img matListItemIcon style="width: 45px; height: 45px;" [src]="produto.thumbnailUrl" width="45" height="45" alt="imagem do produto">
+        <div matListItemTitle>Produto: {{produto.id}}</div>
+        <div matListItemLine>Album: {{produto.albumId}}</div>
+      </mat-list-option>
+    </ng-container>
+  </mat-selection-list>
+  <button mat-raised-button (click)="excluir()" color="warn">EXCLUIR</button>
+</div>
